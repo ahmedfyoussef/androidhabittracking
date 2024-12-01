@@ -17,14 +17,15 @@ import com.habit.palmapp.R;
 import com.habit.palmapp.models.Habit;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHolder> {
 
     private List<Habit> habitList;
     private OnItemClickListener onItemClickListener;
-    private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-    //private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+
     private Context context ;
     private View.OnClickListener onClickListener;
 
@@ -50,14 +51,17 @@ public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHold
 
 
     }
-
+    public void setHabitList(List<Habit> habitList) {
+        this.habitList = habitList;
+        notifyDataSetChanged();
+    }
 
     public HabitsAdapter(List<Habit> habits, Context context   ) {
 
 
         this.habitList = habits;
         this.context = context ;
-        this.onClickListener = onClickListener;
+
     }
 
     @Override

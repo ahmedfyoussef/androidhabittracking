@@ -18,6 +18,7 @@ The goal of this project is to build an Android application that allows users to
 
   - **Firebase integration**: Allows users to store and retrieve habits to/from firebase database .
 
+  - **Used MVVM and Live Data**: better design pattern for updating UI .
 
 ## Getting Started
 

@@ -7,6 +7,8 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +18,7 @@ import com.habit.palmapp.adapters.HabitsAdapter;
 import com.habit.palmapp.models.Habit;
 import com.habit.palmapp.networks.Networking;
 import com.habit.palmapp.utils.Utils;
+import com.habit.palmapp.viewmodels.HabitViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,14 +26,15 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class HabitsActivity extends AppCompatActivity implements View.OnClickListener {
-    Boolean isActive = true ;
+    private Boolean isActive = true ;
     private  int habitsize = 0 ;
 
     LinearLayoutManager layoutManager ;
 
     HabitsAdapter habitsAdapter ;
-    ArrayList<Habit> habitslist = new ArrayList<>();
 
+    ArrayList<Habit> habitslist = new ArrayList<>();
+    private List habits = new ArrayList<>();
     RecyclerView habitsrv ;
     //used to store habit by date , for daily updates
     String todayDate = "" ;
@@ -38,6 +42,8 @@ public class HabitsActivity extends AppCompatActivity implements View.OnClickLis
     ImageButton addbtn ;
     private Networking networking;
     private Utils utils ;
+    private HabitViewModel habitViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,8 +56,8 @@ public class HabitsActivity extends AppCompatActivity implements View.OnClickLis
 
         try {
 
-            gethabits();
-
+            //gethabits();
+            gethabitsmvvm();
         } catch (Exception e) {
 
             Toast.makeText(getApplicationContext(),"Failed to get habits from database,try again",Toast.LENGTH_SHORT).show();
@@ -72,10 +78,53 @@ public class HabitsActivity extends AppCompatActivity implements View.OnClickLis
 
     }
     private void gettodaydate(){
-        //used to store habits by date to be auto daily list 
+        //used to store habits by date to be auto daily list
         todayDate = utils.getTodayDate() ;
 
 
+    }
+    private void gethabitsmvvm(){
+        habitsrv.setLayoutManager(new LinearLayoutManager(this));
+        habitsAdapter  = new HabitsAdapter( habits,this);
+        habitsrv.setAdapter(habitsAdapter);
+
+        habitViewModel = new ViewModelProvider(this).get(HabitViewModel.class);
+
+        habitViewModel.getHabitList().observe(this, new Observer<List<Habit>>() {
+            @Override
+            public void onChanged(List<Habit> habits) {
+
+
+                habitslist.clear();
+                habitslist.addAll(habits);
+                habitsAdapter.setHabitList(habits);
+            }
+        });
+        habitsAdapter.setOnItemClickListener(new HabitsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Habit habit, int viewId) {
+
+                if (viewId == R.id.ib) {
+                    networking.removeHabit(todayDate, habit.getHabitid());
+
+                }
+            }
+
+            @Override
+            public void onItemClick(Habit habit, int viewId, boolean isChecked) {
+                networking.updateHabitStatus(todayDate, habit.getHabitid(), isChecked);
+                if (viewId == R.id.cb) {
+                    if (isChecked) {
+                        Toast.makeText(getApplicationContext(),
+                                "You completed " + habit.getHabit() + " for today!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                habit.getHabit() + " not completed so far", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+            }
+        });
     }
     private void gethabits() {
         //get habits list from database and update the list using habits adapter
@@ -104,19 +153,24 @@ public class HabitsActivity extends AppCompatActivity implements View.OnClickLis
                                         habitsAdapter.setOnItemClickListener(new HabitsAdapter.OnItemClickListener() {
                                             @Override
                                             public void onItemClick(Habit habit, int viewId) {
-                                                networking.removeHabit(todayDate, habit.getHabitid());
+                                                if (viewId == R.id.ib) {
+                                                    networking.removeHabit(todayDate, habit.getHabitid());
+
+                                                }
                                             }
 
                                             @Override
                                             public void onItemClick(Habit habit, int viewId, boolean isChecked) {
                                                 networking.updateHabitStatus(todayDate, habit.getHabitid(), isChecked);
 
-                                                if (isChecked) {
-                                                    Toast.makeText(getApplicationContext(),
-                                                            "You completed " + habit.getHabit() + " for today!", Toast.LENGTH_SHORT).show();
-                                                } else {
-                                                    Toast.makeText(getApplicationContext(),
-                                                            habit.getHabit() + " not completed so far", Toast.LENGTH_SHORT).show();
+                                                if (viewId == R.id.cb) {
+                                                    if (isChecked) {
+                                                        Toast.makeText(getApplicationContext(),
+                                                                "You completed " + habit.getHabit() + " for today!", Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        Toast.makeText(getApplicationContext(),
+                                                                habit.getHabit() + " not completed so far", Toast.LENGTH_SHORT).show();
+                                                    }
                                                 }
                                             }
                                         });
@@ -192,6 +246,7 @@ public class HabitsActivity extends AppCompatActivity implements View.OnClickLis
     protected void onResume() {
         super.onResume();
         setactivityactive();
+        gethabitsmvvm();
     }
 
     @Override
