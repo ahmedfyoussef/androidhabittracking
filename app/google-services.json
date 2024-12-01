@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "1086841199513",
+    "firebase_url": "https://habit-tracking-f7f84-default-rtdb.firebaseio.com",
+    "project_id": "habit-tracking-f7f84",
+    "storage_bucket": "habit-tracking-f7f84.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1086841199513:android:2f9872600d8a0599c89108",
+        "android_client_info": {
+          "package_name": "com.habit.palm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsPzH3drNlBO4mRIF0AoBrR60qf6CBtfs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1086841199513:android:c429996541daa3ccc89108",
+        "android_client_info": {
+          "package_name": "com.habit.palmapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsPzH3drNlBO4mRIF0AoBrR60qf6CBtfs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
