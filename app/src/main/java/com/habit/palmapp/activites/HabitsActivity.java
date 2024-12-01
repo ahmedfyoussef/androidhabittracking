@@ -221,7 +221,18 @@ public class HabitsActivity extends AppCompatActivity implements View.OnClickLis
                 Toast.makeText(getApplicationContext(), "Habit name can't be empty", Toast.LENGTH_SHORT).show();
             } else {
                 // create habit object and store in database
+                networking.addHabit(todayDate, habitName, new Networking.AddHabitCallback() {
+                    @Override
+                    public void onSuccess(String message) {
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                        habitnameet.setText(""); // Clear the EditText after adding
+                    }
 
+                    @Override
+                    public void onError(String errorMessage) {
+                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                    }
+                });
 
 
             }

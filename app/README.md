@@ -20,6 +20,8 @@ The goal of this project is to build an Android application that allows users to
 
   - **Used MVVM and Live Data**: better design pattern for updating UI .
 
+  - **Activate insertion to database and added some comments  .
+
 ## Getting Started
 
 To get started with this project, follow the steps below:
