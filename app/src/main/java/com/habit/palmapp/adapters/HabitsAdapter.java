@@ -106,7 +106,8 @@ public class HabitsAdapter extends RecyclerView.Adapter<HabitsAdapter.MyViewHold
 
 
     }
-    public interface OnItemClickListener {
+
+     public interface OnItemClickListener {
         void onItemClick(Habit habit, int viewId);
         void onItemClick(Habit habit, int viewId, boolean isChecked);
     }

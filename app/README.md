@@ -16,6 +16,9 @@ The goal of this project is to build an Android application that allows users to
 
   The UI was designed using Android's XML layouts .
 
+  - **Firebase integration**: Allows users to store and retrieve habits to/from firebase database .
+
+
 ## Getting Started
 
 To get started with this project, follow the steps below:
